@@ -16,11 +16,12 @@ Android + Maven + Eclipse 에서 한번 좌절했고,
 Robolectric 에서 한번 또 좌절했다.  
 대부분, 특히 Robolectric, 문서도 부실하다.
 
+그럼 이제부터 그 과정에 대해 설명해보겠다.  
 우선 내 OS 환경은 Mac OS X Maverics 이며,  
 이클립스는 Android Developer Tools, Build: v22.3.0-887826 을 사용하고 있다.
 
-## 1. Android SDK
 
+## 1. Android SDK
 
 ADT를 사용한다면 이미 Android SDK는 설치되어 있을 것이다.  
 다음 두 가지 사항을 체크하자.
@@ -43,7 +44,6 @@ ADT를 사용한다면 이미 Android SDK는 설치되어 있을 것이다.
 4.4.2 버전을 사용하기 때문에 Android 4.4.2 (API 19)와 Android SDK Build-tools (19.0.1)를 설치한다.
 
 
-
 ## 2. Maven 3.11 설치
 
 android-maven-plugin으로 디바이스에 디플로이하려면 Maven 3.11 버전(혹은 이상)을 사용해야 한다.
@@ -58,8 +58,6 @@ Homebrew를 사용하고 있다면..
 - 직접 설치
 
 다음 URL에서 Maven 3.11 binary를 다운로드한다.
-
-
 
 [http://maven.apache.org/download.cgi](http://maven.apache.org/download.cgi)
 
@@ -84,7 +82,6 @@ Homebrew를 사용하고 있다면..
 
   - Android Connector for M2E
 
-
 - m2e-apt: [http://download.jboss.org/jbosstools/updates/m2e-extensions/m2e-apt](http://download.jboss.org/jbosstools/updates/m2e-extensions/m2e-apt)
 
   - Maven Integration for Eclipse JDT APT
@@ -94,6 +91,7 @@ Homebrew를 사용하고 있다면..
 - [http://www.eclipse.org/m2e/](http://www.eclipse.org/m2e/)
 - [http://rgladwell.github.io/m2e-android/](http://rgladwell.github.io/m2e-android/)
 - [https://github.com/jbosstools/m2e-apt](https://github.com/jbosstools/m2e-apt)
+
 
 ## 4. 안드로이드 라이브러리를 메이븐 로컬 리포지토리로 복사
 
@@ -107,29 +105,31 @@ Maven 중앙 리포지토리에 안드로이드 라이브러리가 4.1.1.4까지
 
 다음과 같이 실행한다.
 
-  $ git clone git@github.com:mosabua/maven-android-sdk-deployer.git
-  $ cd maven-android-sdk-deployer
-  $ mvn install -P 4.4
+    $ git clone git@github.com:mosabua/maven-android-sdk-deployer.git
+    $ cd maven-android-sdk-deployer
+    $ mvn install -P 4.4
+
 
 ## 5. 이클립스 메이븐 관련 설정
 
 이클립스의 환경 설정 창에서 다음 두 가지를 설정한다.
 
-- Maven > Annotation Processing
+- `Maven > Annotation Processing`
 
-  'Automatically configure JDT APT’ 선택
+  `Automatically configure JDT APT` 선택
 
-- Maven > Installations
+- `Maven > Installations`
 
   m2e 플러그인에 기본 포함된 Maven 버전은 3.0.4인데  
   android-maven-plugin를 이용해 빌드하고 디바이스에 배포하려면 Maven 3.1.1 버전이 필요하다.  
   Add… 버튼을 클릭해 앞에서 설치했던 Maven 위치를 지정해 3.1.1 버전을 사용하도록 하자.
 
+
 ## 6. 소스 Clone 및 Import
 
 이제 드디어 소스를 Clone해 Import할 수 있다. ㅎ
 
-  $ git clone git@github.com:kjunine/android-sample.git
+    $ git clone git@github.com:kjunine/android-sample.git
 
 이제 이클립스에서 Import해서 메이븐 프로젝트로 변환하거나,  
 아니면 바로 메이븐 프로젝트로 Import한다.
@@ -139,31 +139,34 @@ Maven 중앙 리포지토리에 안드로이드 라이브러리가 4.1.1.4까지
 android-maven-plugin 3.7.0 버전을 사용하면 에러가 안 나지만 대신 디바이스에 디플로이를 할 수 없다. ㅋ  
 (내가 미리 말하지 않았나 아름답지 않다고.. ㅠㅠ)
 
+
 ## 7. 테스트 실행
 
 JUnit 테스트는 이클립스에서 바로 실행할 수 있다.  
 하지만 반드시 Android JUnit Test Launcher가 아닌 Eclipse JUnit Launcher로 실행해야 한다.
 
+
 ## 8. 디바이스에서 실행
 
 일반적인 안드로이드 개발과 달리 디바이스에서 실행하기 위하여  
-Run As >Android Application 로 실행하면 안 된다.
+`Run As >Android Application` 로 실행하면 안 된다.
 
-Run As > maven build… 으로 실행해야 한다.  
+R`un As > maven build…` 으로 실행해야 한다.  
 그리고 설정 창에서 다음 사항을 입력 혹은 체크해야 한다.
 
-- Main > Goals: package android:deploy android:run
+- `Main > Goals`: `package android:deploy android:run`
 
-- Main > Skip Tests: 체크
+- `Main > Skip Tests`: 체크
 
-- Environment > New…
+- `Environment > New…`
 
-  Name: ANDROID_HOME  
-  Value: 안드로이드_SDK_설치_경로(무조건 절대 경로로 입력할 것, ‘~' 사용 안 됨)
+  Name: `ANDROID_HOME`  
+  Value: `안드로이드_SDK_설치_경로` (무조건 절대 경로로 입력할 것, ‘~' 사용 안 됨)
 
 처음 한번만 입력해두면 그 다음부터는 툴바의 실행 항목을 이용해 바로 실행할 수 있다.
 
 끝
+
 
 ## POM
 
@@ -265,6 +268,7 @@ Run As > maven build… 으로 실행해야 한다.
   </build>
 </project>
 ```
+
 
 ## LICENSE
 
